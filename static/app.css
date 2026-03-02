@@ -1,0 +1,299 @@
+/* ── Variables ───────────────────────────────────────────── */
+:root {
+  --bg:       #f4f4f4;
+  --surface:  #ffffff;
+  --text:     #111111;
+  --muted:    #666666;
+  --accent:   #e0245e;
+  --nav-bg:   #ffffff;
+  --border:   #e0e0e0;
+  --overlay:  rgba(0,0,0,0.85);
+  --gap:      8px;
+  --col-width: 280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:      #0f0f0f;
+    --surface: #1a1a1a;
+    --text:    #f0f0f0;
+    --muted:   #888888;
+    --accent:  #ff4d80;
+    --nav-bg:  #111111;
+    --border:  #2a2a2a;
+  }
+}
+
+/* ── Reset / Base ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; }
+img, video { display: block; width: 100%; height: auto; }
+
+/* ── Nav ─────────────────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1.2rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.brand:hover { text-decoration: none; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.nav-blogname {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.type-filter { display: flex; gap: 0.4rem; }
+.type-filter a {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.type-filter a.active,
+.type-filter a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  text-decoration: none;
+}
+
+.search-form input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.8rem;
+  padding: 0.25rem 0.75rem;
+  outline: none;
+  width: 160px;
+  transition: border-color 0.15s, width 0.2s;
+}
+.search-form input:focus {
+  border-color: var(--accent);
+  width: 200px;
+}
+
+.nav-logout {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ── Main / Grid ─────────────────────────────────────────── */
+main { padding: var(--gap); }
+
+.page-header {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 0.75rem 0.25rem 0.5rem;
+}
+
+/* True CSS masonry using column-count */
+.masonry-grid {
+  column-count: auto;
+  column-width: var(--col-width);
+  column-gap: var(--gap);
+}
+
+.post-card {
+  break-inside: avoid;
+  margin-bottom: var(--gap);
+  background: var(--surface);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .post-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
+}
+
+.post-card img,
+.post-card video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.post-card .post-meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.4rem 0.6rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.post-card:hover .post-meta { opacity: 1; }
+
+.post-meta .blog-name {
+  font-size: 0.75rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.post-meta .note-count {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.75);
+}
+
+/* ── Loader / Sentinel ───────────────────────────────────── */
+.loader {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 2rem;
+}
+.loader span {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: bounce 0.9s infinite alternate;
+}
+.loader span:nth-child(2) { animation-delay: 0.2s; }
+.loader span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  from { opacity: 0.3; transform: translateY(0); }
+  to   { opacity: 1;   transform: translateY(-6px); }
+}
+
+.hidden { display: none !important; }
+
+.end-message {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 2rem;
+}
+
+#sentinel { height: 100px; }
+
+/* ── Lightbox ────────────────────────────────────────────── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-media {
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-media img,
+.lightbox-media video {
+  max-width: 90vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none; border: none;
+  color: #fff; font-size: 1.5rem;
+  cursor: pointer; opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.lightbox-close:hover { opacity: 1; }
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.1);
+  border: none; color: #fff;
+  font-size: 2rem; width: 2.5rem; height: 5rem;
+  cursor: pointer; border-radius: 4px;
+  transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.lightbox-prev { left: 1rem; }
+.lightbox-next { right: 1rem; }
+.lightbox-prev:hover,
+.lightbox-next:hover { background: rgba(255,255,255,0.2); }
+
+.lightbox-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.lightbox-actions button,
+.lightbox-actions a {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.lightbox-actions button:hover,
+.lightbox-actions a:hover { background: rgba(255,255,255,0.25); }
+
+.btn-like.liked { color: var(--accent); border-color: var(--accent); }

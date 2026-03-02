@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <nav>
+    <a class="brand" href="/">Michelangelo</a>
+    <div class="nav-links">
+      {{if .BlogName}}
+        <a href="/" class="nav-blogname">{{.BlogName}}</a>
+      {{end}}
+      <div class="type-filter">
+        <a href="#" data-type="photo" class="active">Photos</a>
+        <a href="#" data-type="video">Videos</a>
+      </div>
+      <form class="search-form" action="/search" method="get">
+        <input type="search" name="q" placeholder="Search tags…"
+          value="{{if eq .View "search"}}{{.QueryOrBlog}}{{end}}">
+      </form>
+      <a href="/logout" class="nav-logout">Logout</a>
+    </div>
+  </nav>
+
+  <main>
+    {{if eq .View "blog"}}
+      <h2 class="page-header">
+        <a href="https://{{.QueryOrBlog}}.tumblr.com" target="_blank" rel="noopener">{{.QueryOrBlog}}</a>
+      </h2>
+    {{else if eq .View "search"}}
+      <h2 class="page-header">Tag: {{.QueryOrBlog}}</h2>
+    {{end}}
+
+    <div id="grid" class="masonry-grid"></div>
+    <div id="sentinel"></div>
+    <div id="loader" class="loader hidden">
+      <span></span><span></span><span></span>
+    </div>
+    <p id="end-message" class="end-message hidden">No more posts.</p>
+  </main>
+
+  <!-- Lightbox overlay -->
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true">
+    <button class="lightbox-close" aria-label="Close">&#x2715;</button>
+    <button class="lightbox-prev" aria-label="Previous">&#x2039;</button>
+    <button class="lightbox-next" aria-label="Next">&#x203a;</button>
+    <div class="lightbox-media"></div>
+    <div class="lightbox-actions">
+      <button class="btn-like" data-id="" data-key="" data-liked="false">&#9825; Like</button>
+      <button class="btn-reblog" data-id="" data-key="" data-blog="">&#8635; Reblog</button>
+      <a class="btn-source" href="#" target="_blank" rel="noopener">&#8599; Source</a>
+    </div>
+  </div>
+
+  <script>
+    window.MICHELANGELO = {
+      view:    "{{.View}}",
+      blog:    "{{.QueryOrBlog}}",
+      query:   "{{.QueryOrBlog}}",
+      myBlog:  "{{.BlogName}}"
+    };
+  </script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
