@@ -1,0 +1,51 @@
+┌──────────────────────────────────────────────────────────────┐
+│  M I C H E L A N G E L O                   [ KRZ ]   krz.sh  │
+└──────────────────────────────────────────────────────────────┘
+
+WHAT
+  self-hosted tumblr media client, written in go. shows photos and
+  videos from your dashboard in a masonry grid. no ads, no tracking,
+  no npm.
+
+DOES
+  - css masonry grid, variable height, packed tight
+  - infinite scroll via IntersectionObserver
+  - per-blog grid view (/blog/<name>)
+  - tag search (/search?q=<tag>)
+  - like and reblog from the lightbox
+  - dark/light via prefers-color-scheme
+  - go stdlib only, no external runtime deps
+
+SETUP
+  1. create a tumblr app at https://www.tumblr.com/oauth/apps.
+     callback url http://localhost:8080/auth/callback (or your domain).
+
+  2. configure:
+
+         export CONSUMER_KEY="your-consumer-key"
+         export CONSUMER_SECRET="your-consumer-secret"
+         export PORT=8080   # optional, defaults to 8080
+
+  3. build and run:
+
+         go build -o michelangelo .
+         ./michelangelo
+
+     open http://localhost:8080. you'll be sent to tumblr to authorize.
+
+STRUCTURE
+  main.go          http router, oauth flow, api proxy
+  tumblr.go        tumblr api client (oauth 1.0a, no deps)
+  templates/       layout.html, the html shell
+  static/          app.css (grid, themes), app.js (scroll, lightbox)
+
+NOTES
+  - oauth tokens live in cookies. clear them or hit /logout to
+    re-authenticate.
+  - like/reblog use the tumblr v1 api; reblogging to your own blog
+    needs your blog name detected on first auth.
+  - tag search uses /tagged, one batch, no pagination.
+
+┌──────────────────────────────────────────────────────────────┐
+│  krz.sh                                                      │
+└──────────────────────────────────────────────────────────────┘
